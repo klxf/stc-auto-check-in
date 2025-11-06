@@ -6,16 +6,16 @@ from urllib.parse import urljoin
 def visit_url_and_sign(base_url, index_url, cookies_str, output_filename="zqlj_sign.html"):
     headers = {
         "Cookie": cookies_str,
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"  
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
     }
     print(f"正在访问打卡首页: {index_url}")
     try:
-        response = requests.get(index_url, headers=headers)  
+        response = requests.get(index_url, headers=headers)
         print(f"请求状态码: {response.status_code}")
 
         if response.status_code == 200:
             with open(output_filename, "w", encoding="utf-8") as f:
-                f.write(response.text)  
+                f.write(response.text)
             print(f"响应内容已成功缓存到 '{output_filename}'")
             
             soup = BeautifulSoup(response.text, 'html.parser')
@@ -35,7 +35,7 @@ def visit_url_and_sign(base_url, index_url, cookies_str, output_filename="zqlj_s
                 sign_response = requests.get(full_sign_url, headers=headers)
                 print(f"请求状态码: {sign_response.status_code}")
 
-                if sign_response.status_code == 200:  
+                if sign_response.status_code == 200:
                     print("成功请求打卡链接！")
                     sign_result_soup = BeautifulSoup(sign_response.text, 'html.parser')
                     message_div = sign_result_soup.find('div', id='messagetext')
@@ -50,7 +50,7 @@ def visit_url_and_sign(base_url, index_url, cookies_str, output_filename="zqlj_s
                 else:
                     print("打卡请求失败。")
                     print("\n--- 请求响应内容 ---")
-                    print(sign_response.text[:500])  
+                    print(sign_response.text[:500])
 
             else:
                 print("未找到 '点击打卡' 链接或其 href 属性。请检查页面内容是否已更新或已打卡。")
@@ -64,7 +64,7 @@ def visit_url_and_sign(base_url, index_url, cookies_str, output_filename="zqlj_s
         print(f"请求发生错误: {e}")
     except AttributeError:
         print("解析HTML时出现错误，未找到目标元素")
-    except Exception as e:  
+    except Exception as e:
         print(f"发生未知错误: {e}")
 
 
